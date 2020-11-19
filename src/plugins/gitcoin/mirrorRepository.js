@@ -271,13 +271,14 @@ export class PostgresMirrorRepository
     };
 
     const fetchTimestamp = (user) => {
-      const response = this._db.querySync(dedent`SELECT created_on
-                                                 FROM
-                                                    dashboard_profile as dp
-                                                 WHERE
-                                                    dp.id = ${user.profile_id}`);
-
-      user.created_on = response[0].created_on;
+      if (user.profile_id) {
+        const response = this._db.querySync(dedent`SELECT created_on
+                                                  FROM
+                                                      dashboard_profile as dp
+                                                  WHERE
+                                                      dp.id = ${user.profile_id}`);
+        user.created_on = response[0].created_on;
+      }
 
       return user;
     };
